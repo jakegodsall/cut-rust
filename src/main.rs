@@ -23,22 +23,35 @@ fn field_mode() {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {    
-    let options: Vec<String> = std::env::args().collect();
-    
-    let mut run_mode = RunMode::Byte;
-    for option in options.iter() {
-        run_mode = match option.as_str() {
-            "-b" => RunMode::Byte,
-            "-c" => RunMode::Character,
-            "-f" => RunMode::Field,
-            _ => panic!("Incorrect option"),
-        }
-    }
+    let mut args = std::env::args().skip(1);
+    let mut list: Option<String> = None;
 
-    match run_mode {
-        RunMode::Byte => byte_mode(),
-        RunMode::Character => char_mode(),
-        RunMode::Field => field_mode(),
+    let mut run_mode: RunMode;
+
+    while let Some(arg) = args.next() {
+        match arg.as_str() {
+            "-b" => {
+                run_mode = RunMode::Byte;
+                list = args.next();
+                if list.is_none() {
+                    return Err("expected list after -b".into());
+                }
+            },
+            "-c" => {
+                run_mode = RunMode::Character;
+                list = args.next();
+                if list.is_none() {
+                    return Err("expected list after -c".into());
+                }
+            },
+            "-f" => {
+                run_mode = RunMode::Field;
+                list = args.next();
+                if list.is_none() {
+                    return Err("expected list after -f".into());
+                }
+            }
+        }
     }
     
     let content = read_file("data/fourchords.csv")?;
