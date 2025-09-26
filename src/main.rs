@@ -22,11 +22,11 @@ fn field_mode() {
     todo!();
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-
+fn main() -> Result<(), Box<dyn std::error::Error>> {    
+    let options: Vec<String> = std::env::args().collect();
+    
     let mut run_mode = RunMode::Byte;
-
-    for option in std::env::args() {
+    for option in options.iter() {
         run_mode = match option.as_str() {
             "-b" => RunMode::Byte,
             "-c" => RunMode::Character,
