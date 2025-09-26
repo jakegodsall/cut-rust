@@ -1,7 +1,7 @@
 use std::io::Read;
 
 
-enum Mode { Byte, Character, Field }
+enum RunMode { Byte, Character, Field }
 
 fn read_file(file_handle: &str) -> Result<String, Box<std::io::Error>> {
     let mut file = std::fs::File::open(file_handle)?;
@@ -10,7 +10,37 @@ fn read_file(file_handle: &str) -> Result<String, Box<std::io::Error>> {
     Ok(content)
 }
 
+fn byte_mode() {
+    todo!();
+}
+
+fn char_mode() {
+    todo!();
+}
+
+fn field_mode() {
+    todo!();
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+
+    let mut run_mode: RunMode;
+
+    for option in std::env::args() {
+        run_mode = match option.as_str() {
+            "-b" => RunMode::Byte,
+            "-c" => RunMode::Character,
+            "-f" => RunMode::Field,
+            _ => panic!("Incorrect option"),
+        }
+    }
+
+    match run_mode {
+        RunMode::Byte => byte_mode(),
+        RunMode::Character => char_mode(),
+        RunMode::Field => field_mode(),
+    }
+    
     let content = read_file("data/fourchords.csv")?;
 
     println!("{}", content);
