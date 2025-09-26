@@ -24,7 +24,7 @@ fn field_mode() {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
-    let mut run_mode: RunMode;
+    let mut run_mode = RunMode::Byte;
 
     for option in std::env::args() {
         run_mode = match option.as_str() {
