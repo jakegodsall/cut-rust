@@ -1,7 +1,11 @@
-use std::{intrinsics::simd, io::Read};
+use std::{io::Read};
 
 
 enum RunMode { Byte, Character, Field }
+struct Range {
+    start: Option<usize>,
+    end: Option<usize>,
+}
 
 fn read_file(file_handle: &str) -> Result<String, Box<std::io::Error>> {
     let mut file = std::fs::File::open(file_handle)?;
@@ -20,6 +24,10 @@ fn char_mode() {
 
 fn field_mode() {
     todo!();
+}
+
+fn parse_range(range: String) -> Result<Range, Box<dyn std::error::Error>> {
+    Ok(Range {start: Some(1) , end: Some(2)})
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {    
@@ -48,8 +56,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 run_mode = RunMode::Field;
                 range = Some(args.next().ok_or_else(|| "expected range after -f".to_string())?);
             },
-            "_" => {
-
+            _ => {
+                todo!();
             }
         }
     }
