@@ -24,32 +24,42 @@ fn field_mode() {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {    
     let mut args = std::env::args().skip(1);
-    let mut list: Option<String> = None;
-
+    
     let mut run_mode: RunMode;
+    let mut delimiter: Option<char> = None;
+    let mut range: Option<String> = None;
 
     while let Some(arg) = args.next() {
         match arg.as_str() {
+            "-d" => {
+                delimiter = args.next();
+                if delimiter.is_none() {
+                    return Err("expected delimiter after -d".into());
+                }
+            }
             "-b" => {
                 run_mode = RunMode::Byte;
-                list = args.next();
-                if list.is_none() {
-                    return Err("expected list after -b".into());
+                range = args.next();
+                if range.is_none() {
+                    return Err("expected range after -b".into());
                 }
             },
             "-c" => {
                 run_mode = RunMode::Character;
-                list = args.next();
-                if list.is_none() {
-                    return Err("expected list after -c".into());
+                range = args.next();
+                if range.is_none() {
+                    return Err("expected range after -c".into());
                 }
             },
             "-f" => {
                 run_mode = RunMode::Field;
-                list = args.next();
-                if list.is_none() {
-                    return Err("expected list after -f".into());
+                range = args.next();
+                if range.is_none() {
+                    return Err("expected range after -f".into());
                 }
+            },
+            "_" => {
+
             }
         }
     }
