@@ -38,24 +38,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
             "-b" => {
                 run_mode = RunMode::Byte;
-                range = args.next();
-                if range.is_none() {
-                    return Err("expected range after -b".into());
-                }
+                range = Some(args.next().ok_or_else(|| "expected range after -b".to_string())?);
             },
             "-c" => {
                 run_mode = RunMode::Character;
-                range = args.next();
-                if range.is_none() {
-                    return Err("expected range after -c".into());
-                }
+                range = Some(args.next().ok_or_else(|| "expected range after -c".to_string())?);
             },
             "-f" => {
                 run_mode = RunMode::Field;
-                range = args.next();
-                if range.is_none() {
-                    return Err("expected range after -f".into());
-                }
+                range = Some(args.next().ok_or_else(|| "expected range after -f".to_string())?);
             },
             "_" => {
 
