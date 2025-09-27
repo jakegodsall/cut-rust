@@ -1,4 +1,4 @@
-use std::io::Read;
+use std::{intrinsics::simd, io::Read};
 
 
 enum RunMode { Byte, Character, Field }
@@ -23,19 +23,18 @@ fn field_mode() {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {    
-    let mut args = std::env::args().skip(1);
+    let mut args = std::env::args().skip(1); // skip file name
     
     let mut run_mode: RunMode;
-    let mut delimiter: Option<char> = None;
+    let mut delimiter: Option<char> = Some('\t');
     let mut range: Option<String> = None;
 
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "-d" => {
-                delimiter = args.next();
-                if delimiter.is_none() {
-                    return Err("expected delimiter after -d".into());
-                }
+                let s = args.next().ok_or_else(|| "expected delimiter after -d".to_string())?;
+                let ch = s.as_str().parse::<char>().map_err(|_| format!("delimiter must be exactly one character, got {:?}", s))?;
+                delimiter = Some(ch);
             }
             "-b" => {
                 run_mode = RunMode::Byte;
