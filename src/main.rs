@@ -32,8 +32,8 @@ fn parse_range(range: String) -> Result<Range, Box<dyn std::error::Error>> {
 
 fn parse_list(list: String) -> Result<Vec<i32>, Box<dyn std::error::Error>> {
     let nums: Result<Vec<i32>, _> = list
-    .split(',')
-    .map(str::trim)
+        .split(',')
+        .map(str::trim)
         .filter(|s| !s.is_empty())
         .map(str::parse::<i32>)
         .collect();
