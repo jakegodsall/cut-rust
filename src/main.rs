@@ -30,12 +30,23 @@ fn parse_range(range: String) -> Result<Range, Box<dyn std::error::Error>> {
     Ok(Range {start: Some(1) , end: Some(2)})
 }
 
+fn parse_list(list: String) -> Result<Vec<i32>, Box<dyn std::error::Error>> {
+    let nums: Result<Vec<i32>, _> = list
+    .split(',')
+    .map(str::trim)
+        .filter(|s| !s.is_empty())
+        .map(str::parse::<i32>)
+        .collect();
+
+    Ok(nums?)
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {    
     let mut args = std::env::args().skip(1); // skip file name
     
     let mut run_mode: RunMode;
     let mut delimiter: Option<char> = Some('\t');
-    let mut range: Option<String> = None;
+    let mut list: Option<String> = None;
 
     while let Some(arg) = args.next() {
         match arg.as_str() {
@@ -46,15 +57,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
             "-b" => {
                 run_mode = RunMode::Byte;
-                range = Some(args.next().ok_or_else(|| "expected range after -b".to_string())?);
+                list = Some(args.next().ok_or_else(|| "expected list after -b".to_string())?);
             },
             "-c" => {
                 run_mode = RunMode::Character;
-                range = Some(args.next().ok_or_else(|| "expected range after -c".to_string())?);
+                list = Some(args.next().ok_or_else(|| "expected list after -c".to_string())?);
             },
             "-f" => {
                 run_mode = RunMode::Field;
-                range = Some(args.next().ok_or_else(|| "expected range after -f".to_string())?);
+                list = Some(args.next().ok_or_else(|| "expected list after -f".to_string())?);
             },
             _ => {
                 todo!();
