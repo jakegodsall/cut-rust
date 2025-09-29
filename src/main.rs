@@ -64,9 +64,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         },
         Some(val) => {
-            range = match parse_range(val) {
-                
-            }
+        
         },
         None => println!("no value"),
     }
