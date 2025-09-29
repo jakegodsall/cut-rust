@@ -50,6 +50,43 @@ pub fn parse_range(input: &str) -> Result<Range, &'static str> {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parses_range_with_start_and_end() {
+        let range_str = "1-2";
+        let res = parse_range(range_str).unwrap();
+        assert_eq!(res.start, Some(1));
+        assert_eq!(res.end, Some(2));
+    }
+
+    #[test]
+    fn parses_range_with_start_exclusive() {
+        let range_str = "1-";
+        let res = parse_range(range_str).unwrap();
+        assert_eq!(res.start, Some(1));
+        assert_eq!(res.end, None);
+    }
+
+    #[test]
+    fn parses_range_with_end_exclusive() {
+        let range_str = "-2";
+        let res = parse_range(range_str).unwrap();
+        assert_eq!(res.start, None);
+        assert_eq!(res.end, Some(2));
+    }
+
+    #[test]
+    fn parses_range_empty() {
+        let range_str = "-";
+        let res = parse_range(range_str).unwrap();
+        assert_eq!(res.start, None);
+        assert_eq!(res.end, None);
+    }
+}
+
 pub fn parse_list(list: String) -> Result<Vec<i32>, Box<dyn std::error::Error>> {
     let nums: Result<Vec<i32>, _> = list
         .split(',')
