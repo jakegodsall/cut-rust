@@ -3,6 +3,7 @@ pub struct Range {
     pub end: Option<usize>,
 }
 
+
 pub fn parse_range(input: &str) -> Result<Range, &'static str> {
     let s = input.trim();
     if s.is_empty() {
@@ -38,7 +39,7 @@ pub fn parse_range(input: &str) -> Result<Range, &'static str> {
     }
 }
 
-fn parse_list(list: String) -> Result<Vec<i32>, Box<dyn std::error::Error>> {
+pub fn parse_list(list: String) -> Result<Vec<i32>, Box<dyn std::error::Error>> {
     let nums: Result<Vec<i32>, _> = list
         .split(',')
         .map(str::trim)

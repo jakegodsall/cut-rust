@@ -22,10 +22,6 @@ fn field_mode() {
     todo!();
 }
 
-fn parse_range(range: String) -> Result<Range, Box<dyn std::error::Error>> {
-    Ok(Range {start: Some(1) , end: Some(2)})
-}
-
 fn main() -> Result<(), Box<dyn std::error::Error>> {    
     let mut args = std::env::args().skip(1); // skip file name
     
