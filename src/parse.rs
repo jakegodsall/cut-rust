@@ -3,7 +3,18 @@ pub struct Range {
     pub end: Option<usize>,
 }
 
-
+/// Extract range statement into a Range struct
+/// 
+/// # Example
+/// 
+/// ```
+/// let range_str = "3-5";
+/// let res = cut_rust::parse::parse_range(range_str).unwrap();
+/// 
+/// assert_eq!(res.start, Some(3));
+/// assert_eq!(res.end, Some(5));
+/// ```
+/// 
 pub fn parse_range(input: &str) -> Result<Range, &'static str> {
     let s = input.trim();
     if s.is_empty() {
