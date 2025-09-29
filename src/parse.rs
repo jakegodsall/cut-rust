@@ -1,3 +1,8 @@
+pub struct Range {
+    pub start: Option<usize>,
+    pub end: Option<usize>,
+}
+
 pub fn parse_range(input: &str) -> Result<Range, &'static str> {
     let s = input.trim();
     if s.is_empty() {

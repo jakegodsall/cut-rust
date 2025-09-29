@@ -1,11 +1,7 @@
 use std::{io::Read};
-use cut_rust::parse::{ parse_range, parse_list };
+use cut_rust::parse::{ Range, parse_range, parse_list };
 
 enum RunMode { Byte, Character, Field }
-struct Range {
-    start: Option<usize>,
-    end: Option<usize>,
-}
 
 fn read_file(file_handle: &str) -> Result<String, Box<std::io::Error>> {
     let mut file = std::fs::File::open(file_handle)?;
