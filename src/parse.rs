@@ -1,9 +1,9 @@
-pub struct Range {
-    pub start: Option<usize>,
-    pub end: Option<usize>,
+pub enum Selection {
+    Range { start: Option<usize>, end: Option<usize> },
+    List(Vec<usize>),
 }
 
-/// Extract range statement into a Range struct
+/// Extract range statement into a Selection::Range struct
 /// 
 /// # Example
 /// 
@@ -15,7 +15,7 @@ pub struct Range {
 /// assert_eq!(res.end, Some(5));
 /// ```
 /// 
-pub fn parse_range(input: &str) -> Result<Range, &'static str> {
+pub fn parse_range(input: &str) -> Result<Selection, &'static str> {
     let s = input.trim();
     if s.is_empty() {
         return Err("empty string");
@@ -40,10 +40,10 @@ pub fn parse_range(input: &str) -> Result<Range, &'static str> {
                 .map_err(|_| "invalid end")?)
         };
         
-        Ok(Range { start, end })
+        Ok(Selection::Range { start, end })
     } else {
         let n = s.parse::<usize>().map_err(|_| "invalid numbrer")?;
-            Ok(Range {
+            Ok(Selection::Range {
                 start: Some(n),
                 end: Some(n)
             })
@@ -59,32 +59,52 @@ mod tests {
     fn parses_range_with_start_and_end() {
         let range_str = "1-2";
         let res = parse_range(range_str).unwrap();
-        assert_eq!(res.start, Some(1));
-        assert_eq!(res.end, Some(2));
+        match res {
+            Selection::Range { start, end } => {
+                assert_eq!(start, Some(1));
+                assert_eq!(end, Some(2));
+            }
+            _ => panic!("expected Selection::Range")
+        }
     }
 
     #[test]
     fn parses_range_with_start_exclusive() {
         let range_str = "1-";
         let res = parse_range(range_str).unwrap();
-        assert_eq!(res.start, Some(1));
-        assert_eq!(res.end, None);
+        match res {
+            Selection::Range { start, end } => {
+                assert_eq!(start, Some(1));
+                assert_eq!(end, None);
+            },
+            _ => panic!("expected Selection::Range"),
+        }
     }
 
     #[test]
     fn parses_range_with_end_exclusive() {
         let range_str = "-2";
         let res = parse_range(range_str).unwrap();
-        assert_eq!(res.start, None);
-        assert_eq!(res.end, Some(2));
+        match res {
+            Selection::Range { start, end } => {
+                assert_eq!(start, None);
+                assert_eq!(end, Some(2));
+            },
+            _ => panic!("unexpected Selection::Range"),
+        }
     }
 
     #[test]
     fn parses_range_empty() {
         let range_str = "-";
         let res = parse_range(range_str).unwrap();
-        assert_eq!(res.start, None);
-        assert_eq!(res.end, None);
+        match res {
+            Selection::Range { start, end } => {
+                assert_eq!(start, None);
+                assert_eq!(end, None)
+            }
+            _ => panic!("expected Selection::Range"),
+        }
     }
 }
 

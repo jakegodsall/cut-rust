@@ -22,8 +22,6 @@ fn field_mode() {
     todo!();
 }
 
-
-
 fn main() -> Result<(), Box<dyn std::error::Error>> {    
     let mut args = std::env::args().skip(1); // skip file name
     
@@ -57,9 +55,9 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let range: Range;
     match list {
-        Some(val) if val.contains("-") => {
-            range = parse_range(list.unwrap().as_str())?;
-        },
+        // If there's a dash, treat it as a range like "3-7", "-5", or "10-"
+        Some(s) if s.contains('-') => parse_range(s)?,
+        
         Some(val) => {
         
         },
