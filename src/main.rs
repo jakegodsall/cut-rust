@@ -1,5 +1,5 @@
 use std::{io::Read};
-use cut_rust::parse::{ Range, parse_range, parse_list };
+use cut_rust::parse::{ Range, parse_range, parse_list, parse_delimiter };
 
 enum RunMode { Byte, Character, Field }
 
@@ -22,19 +22,20 @@ fn field_mode() {
     todo!();
 }
 
+
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {    
     let mut args = std::env::args().skip(1); // skip file name
     
     let mut run_mode: RunMode;
-    let mut delimiter: Option<char> = Some('\t');
+    let mut delimiter: char = '\t';
     let mut list: Option<String> = None;
 
     while let Some(arg) = args.next() {
         match arg.as_str() {
             "-d" => {
                 let s = args.next().ok_or_else(|| "expected delimiter after -d".to_string())?;
-                let ch = s.as_str().parse::<char>().map_err(|_| format!("delimiter must be exactly one character, got {:?}", s))?;
-                delimiter = Some(ch);
+                delimiter = parse_delimiter(s.as_str()).unwrap();
             }
             "-b" => {
                 run_mode = RunMode::Byte;
@@ -57,7 +58,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let range: Range;
     match list {
         Some(val) if val.contains("-") => {
-
+            range = parse_range(list.unwrap().as_str())?;
         },
         Some(val) => {
         

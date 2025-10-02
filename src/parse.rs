@@ -98,3 +98,7 @@ pub fn parse_list(list: String) -> Result<Vec<i32>, Box<dyn std::error::Error>> 
 
     Ok(nums?)
 }
+
+pub fn parse_delimiter(delimiter: &str) -> Result<char, Box<dyn std::error::Error>> {
+    Ok(delimiter.parse::<char>().map_err(|_| format!("delimiter must be exactly one character, got {:?}", delimiter))?)
+}
