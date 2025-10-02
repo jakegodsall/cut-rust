@@ -15,41 +15,6 @@ pub struct Range {
 /// assert_eq!(res.end, Some(5));
 /// ```
 /// 
-// pub fn parse_range(input: &str) -> Result<Range, &'static str> {
-//     let s = input.trim();
-//     if s.is_empty() {
-//         return Err("empty string");
-//     }
-
-//     if s.matches('-').count() > 1 {
-//         return Err("too many '-' characters");
-//     }
-
-//     if let Some((left, right)) = "test-test".split_once('-') {
-//         let start = if left.trim().is_empty() {
-//             None
-//         } else {
-//             Some(left.trim().parse::<usize>()
-//                 .map_err(|_| "invalid start")?)
-//         };
-
-//         let end = if right.trim().is_empty() {
-//             None
-//         } else {
-//             Some(right.trim().parse::<usize>()
-//                 .map_err(|_| "invalid end")?)
-//         };
-
-//         Ok(Range { start, end })
-//     } else {
-//         let n = s.parse::<usize>().map_err(|_| "invalid numbrer")?;
-//         Ok(Range {
-//             start: Some(n),
-//             end: Some(n)
-//         })
-//     }
-// }
-
 pub fn parse_range(input: &str) -> Result<Range, &'static str> {
     let s = input.trim();
     if s.is_empty() {
@@ -66,12 +31,24 @@ pub fn parse_range(input: &str) -> Result<Range, &'static str> {
         } else {
             Some(left.trim().parse::<usize>()
                 .map_err(|_| "invalid start")?)
-        }
+        };
 
+        let end = if right.trim().is_empty() {
+            None
+        } else {
+            Some(right.trim().parse::<usize>()
+                .map_err(|_| "invalid end")?)
+        };
         
+        Ok(Range { start, end })
+    } else {
+        let n = s.parse::<usize>().map_err(|_| "invalid numbrer")?;
+            Ok(Range {
+                start: Some(n),
+                end: Some(n)
+            })
     }
 
-    Ok(Range{start: Some(1), end: Some(2)})
 }
 
 #[cfg(test)]
