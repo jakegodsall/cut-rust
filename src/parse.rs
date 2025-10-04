@@ -108,15 +108,32 @@ mod tests {
     }
 }
 
-pub fn parse_list(list: String) -> Result<Vec<i32>, Box<dyn std::error::Error>> {
-    let nums: Result<Vec<i32>, _> = list
+/// Extract list into a Selection::List struct
+/// 
+/// # Example
+/// 
+/// ```
+/// use cut_rust::parse::{parse_list, Selection};
+///
+/// let list_str = "1,2,3";
+/// let res = parse_list(list_str).unwrap();
+///
+/// match res {
+///     Selection::List(v) => {
+///         assert_eq!(v, vec![1, 2, 3]);
+///     }
+///     _ => panic!("expected Selection::List"),
+/// }
+/// ```
+pub fn parse_list(list: &str) -> Result<Selection, Box<dyn std::error::Error>> {
+    let nums: Vec<usize> = list
         .split(',')
         .map(str::trim)
         .filter(|s| !s.is_empty())
-        .map(str::parse::<i32>)
+        .map(|s| s.parse::<usize>().unwrap())
         .collect();
 
-    Ok(nums?)
+    Ok(Selection::List(nums))
 }
 
 pub fn parse_delimiter(delimiter: &str) -> Result<char, Box<dyn std::error::Error>> {
