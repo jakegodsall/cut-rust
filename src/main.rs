@@ -1,5 +1,5 @@
 use std::{io::Read};
-use cut_rust::parse::{ Range, parse_range, parse_list, parse_delimiter };
+use cut_rust::parse::{ parse_delimiter, parse_list, parse_range, Range, Selection };
 
 enum RunMode { Byte, Character, Field }
 
@@ -53,16 +53,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    let range: Range;
-    match list {
-        // If there's a dash, treat it as a range like "3-7", "-5", or "10-"
-        Some(s) if s.contains('-') => parse_range(s)?,
+    let selection: Selection = match list {
+        Some(s) if s.contains('-') => parse_range(&s)?,
         
-        Some(val) => {
-        
+        Some(s) if s.contains(',') => parse_list(&s)?,
+
+        Some(s) => {
+            let num: usize = s.parse()?;
+            Selection::List(vec![num])
         },
-        None => println!("no value"),
-    }
+
+        None => return Err("no selection provided".into())
+    };
     
     // let content = read_file("data/fourchords.csv")?;
 
