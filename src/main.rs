@@ -1,5 +1,5 @@
 use std::{io::Read};
-use cut_rust::parse::{ parse_delimiter, parse_list, parse_range, Range, Selection };
+use cut_rust::parse::{ parse_delimiter, parse_list, parse_range, Selection };
 
 enum RunMode { Byte, Character, Field }
 
